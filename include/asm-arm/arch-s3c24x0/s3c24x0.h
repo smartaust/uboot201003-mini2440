@@ -535,7 +535,7 @@ struct s3c2400_adc {
 
 
 /* ADC (see manual chapter 16) */
-struct s3c2410_adc {
+struct s3c2440_adc {
 	u32	ADCCON;
 	u32	ADCTSC;
 	u32	ADCDLY;
@@ -623,7 +623,7 @@ struct s3c2400_mmc {
 
 
 /* SD INTERFACE (see S3C2410 manual chapter 19) */
-struct s3c2410_sdi {
+struct s3c2440_sdi {
 	u32	SDICON;
 	u32	SDIPRE;
 	u32	SDICARG;
