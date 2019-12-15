@@ -155,6 +155,10 @@
 /*-----------------------------------------------------------------------
  * FLASH and environment organization
  */
+#define CONFIG_CMD_NAND     1   /* support nandflash */
+#define CONFIG_NAND_S3C2440 1   /* Nand for mini2440 */
+#define CONFIG_SYS_MAX_NAND_DEVICE 1 /* only 1 nand for mini2440*/
+#define CONFIG_SYS_NAND_BASE   0x4E000000
 
 #define CONFIG_AMD_LV400	1	/* uncomment this if you have a LV400 flash */
 #if 0
@@ -176,7 +180,9 @@
 #define CONFIG_SYS_FLASH_ERASE_TOUT	(5*CONFIG_SYS_HZ) /* Timeout for Flash Erase */
 #define CONFIG_SYS_FLASH_WRITE_TOUT	(5*CONFIG_SYS_HZ) /* Timeout for Flash Write */
 
-#define	CONFIG_ENV_IS_IN_FLASH	1
-#define CONFIG_ENV_SIZE		0x10000	/* Total Size of Environment Sector */
+#define CONFIG_ENV_IS_IN_NAND 1
+#define CONFIG_ENV_OFFSET   0x40000 /* Env save at 256K behind of uboot*/
+#define CONFIG_ENV_SIZE		0x40000	/* Total Size of Environment Sector 256K */
+
 
 #endif	/* __CONFIG_H */

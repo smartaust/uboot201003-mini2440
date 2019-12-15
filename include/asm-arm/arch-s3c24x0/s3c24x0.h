@@ -163,6 +163,26 @@ struct s3c2410_nand {
 	u32	NFECC;
 };
 
+/* NAND FLASH CONTROLLER for s3c2440 */
+struct s3c2440_nand {
+    u32 NFCONF;
+    u32 NFCONT;
+    u32 NFCMD;
+    u32 NFADDR;
+    u32 NFDATA;
+    u32 NFMECCD0;
+    u32 NFMECCD1;
+    u32 NFSECCD;
+    u32 NFSTAT;
+    u32 NFESTAT0;
+    u32 NFESTAT1;
+    u32 NFMECC0;
+    u32 NFMECC1;
+    u32 NFSECC;
+    u32 NFSBLK;
+    u32 NFEBLK;
+
+};
 
 /* UART (see manual chapter 11) */
 struct s3c24x0_uart {
