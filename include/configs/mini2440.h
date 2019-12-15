@@ -55,9 +55,23 @@
  * Hardware drivers
  */
 #define CONFIG_NET_MULTI
+
+#if 0
 #define CONFIG_CS8900		/* we have a CS8900 on-board */
 #define CONFIG_CS8900_BASE	0x19000300
 #define CONFIG_CS8900_BUS16	/* the Linux driver does accesses as shorts */
+#endif
+#define CONFIG_DRIVER_DM9000 /* mini2440 use DM9000A on board*/
+#define CONFIG_DM9000_BASE  0x20000300
+#define DM9000_IO   CONFIG_DM9000_BASE
+#define DM9000_DATA         (CONFIG_DM9000_BASE + 4)
+#define CONFIG_DM9000_USE_16BIT
+#define CONFIG_DM9000_NO_SROM
+
+#define CONFIG_CMD_PING     1
+
+
+
 
 /*
  * select serial console configuration
@@ -97,8 +111,8 @@
 
 #define CONFIG_BOOTDELAY	3
 /*#define CONFIG_BOOTARGS	"root=ramfs devfs=mount console=ttySA0,9600" */
-/*#define CONFIG_ETHADDR	08:00:3e:26:0a:5b */
-#define CONFIG_NETMASK          255.255.255.0
+#define CONFIG_ETHADDR		08:00:3e:26:0a:5b
+#define CONFIG_NETMASK		255.255.255.0
 #define CONFIG_IPADDR		192.168.1.110
 #define CONFIG_SERVERIP		192.168.1.103
 /*#define CONFIG_BOOTFILE	"elinos-lart" */
