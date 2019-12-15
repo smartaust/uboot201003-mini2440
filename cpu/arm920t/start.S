@@ -114,8 +114,8 @@ start_code:
 	orr	r0, r0, #0xd3
 	msr	cpsr, r0
 
-	bl	coloured_LED_init
-	bl	red_LED_on
+@	bl	coloured_LED_init
+@	bl	red_LED_on
 
 #if	defined(CONFIG_AT91RM9200DK) || defined(CONFIG_AT91RM9200EK)
 	/*
@@ -144,7 +144,6 @@ copyex:
 #  define INTSUBMSK	0x4A00001C
 #  define CLKDIVN	0x4C000014	/* clock divisor register */
 # endif
-
 	ldr	r0, =pWTCON
 	mov	r1, #0x0
 	str	r1, [r0]
@@ -160,12 +159,36 @@ copyex:
 	ldr	r0, =INTSUBMSK
 	str	r1, [r0]
 # endif
+# if defined(CONFIG_S3C2440)
+        ldr     r1, =0x3fff
+        ldr     r0, =INTSUBMSK
+        str     r1, [r0]
+# endif
+# if defined(CONFIG_S3C2440)
 
+#define	MPLLCON	0x4c000004
+#define UPLLCON 0x4c000008
+
+	/* FCLK:HCLK:PCLK = 1:2:4 */
+	/* default FCLK is 405 MHz ! */
+	ldr	r0, =CLKDIVN
+	mov	r1, #5
+	str	r1, [r0]
+
+	ldr r0, =MPLLCON
+	ldr r1, =(0x7f<<12)|(0x02<<4)|(0x01)
+	str r1, [r0]
+
+	ldr r0, =UPLLCON
+	ldr r1, =(0x38<<12)|(0x02<<4)|(0x02)
+	str r1, [r0]
+# else
 	/* FCLK:HCLK:PCLK = 1:2:4 */
 	/* default FCLK is 120 MHz ! */
 	ldr	r0, =CLKDIVN
 	mov	r1, #3
 	str	r1, [r0]
+#endif
 #endif	/* CONFIG_S3C24X0 */
 
 	/*
@@ -175,6 +198,23 @@ copyex:
 #ifndef CONFIG_SKIP_LOWLEVEL_INIT
 	bl	cpu_init_crit
 #endif
+
+/******************************************NAND_BOOT ******************************************/
+#define LENGTH_UBOOT 0x60000
+#define NAND_CTL_BASE 0x4E000000
+
+#ifdef CONFIG_S3C2440
+        ldr     sp, DW_STACK_START      @ setup stack pointer
+        mov     fp, #0  @ no previous frame, so fp=0
+
+        @ copy U-Boot to RAM
+        mov     r0, #0x80
+        ldr     r1, =TEXT_BASE
+        bl      nand_readpage
+	bl      stack_setup
+
+#endif    /* CONFIG_S3C2440 */
+/****************************************End NAND BOOT******************************************/
 
 #ifndef CONFIG_SKIP_RELOCATE_UBOOT
 relocate:				/* relocate U-Boot to RAM	    */
@@ -219,6 +259,11 @@ clbss_l:str	r2, [r0]		/* clear loop...                    */
 
 _start_armboot:	.word start_armboot
 
+#define STACK_BASE 0x33f00000
+#define STACK_SIZE 0x10000
+.align  2
+DW_STACK_START:
+	.word   STACK_BASE + STACK_SIZE - 4
 
 /*
  *************************************************************************
